@@ -2,9 +2,12 @@
 	MIT License http://www.opensource.org/licenses/mit-license.php
 	Author Tobias Koppers @sokra
 */
+var loaderUtils = require("loader-utils");
 var path = require("path");
 module.exports = function() {};
 module.exports.pitch = function(remainingRequest) {
+	var loader = this;
+	var options = loaderUtils.getOptions(loader) || {};
 	this.cacheable && this.cacheable();
 	return "require(" + JSON.stringify("!!" + path.join(__dirname, "addScript.js")) + ")"+
 			"(require(" +
@@ -16,5 +19,5 @@ module.exports.pitch = function(remainingRequest) {
 								encodeURI(remainingRequest.replace(/^!/, "")).replace(/%5C|%2F/g, "/").replace(/\?/, "%3F").replace(/^\//, "")
 						) :
 					"") +
-			")";
+			"," + options.stripUseStrict + ")";
 };
